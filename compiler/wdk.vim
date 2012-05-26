@@ -1,7 +1,7 @@
 " Vim compiler file
 " Compiler:	Visual Studio 9.0 compiler and Windows Driver Kit
 " Maintainer:	yuratomo
-" Last Change:	20-May-2012.20
+" Last Change:	27-May-2012.20
 
 if exists("current_compiler")
   finish
@@ -71,7 +71,7 @@ else
     break
   endfor
 
-  exe 'CompilerSet makeprg=' . bat
+  exe 'CompilerSet makeprg=\"' . escape(bat, ' \') . '\"'
   CompilerSet errorformat=%*[0123456789]%*[>]%f(%l)\ :\ %t%*\\D%n:\ %m,%*[^\"]\"%f\"%*\\D%l:\ %m,%f(%l)\ :\ %m,%*[^\ ]\ %f\ %l:\ %m,%f:%l:%c:%m,%f(%l):%m,%f:%l:%m,%f\|%l\|\ %m
 endif
 

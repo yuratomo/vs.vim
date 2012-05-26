@@ -1,7 +1,7 @@
 " Vim compiler file
 " Compiler:	nmake
 " Maintainer:	yuratomo
-" Last Change:	20-May-2012.20
+" Last Change:	27-May-2012.20
 
 if exists("current_compiler")
   finish
@@ -40,7 +40,7 @@ else
     break
   endfor
 
-  exe 'CompilerSet makeprg=' . bat
+  exe 'CompilerSet makeprg=\"' . escape(bat, ' \') . '\"'
   CompilerSet errorformat&
 
 endif
