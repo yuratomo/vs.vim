@@ -71,7 +71,7 @@ else
     break
   endfor
 
-  exe 'CompilerSet makeprg=\"' . escape(bat, ' \') . '\"'
+  exe 'CompilerSet makeprg=' . escape(bat, ' \')
   CompilerSet errorformat=%*[0123456789]%*[>]%f(%l)\ :\ %t%*\\D%n:\ %m,%*[^\"]\"%f\"%*\\D%l:\ %m,%f(%l)\ :\ %m,%*[^\ ]\ %f\ %l:\ %m,%f:%l:%c:%m,%f(%l):%m,%f:%l:%m,%f\|%l\|\ %m
 endif
 

@@ -1,21 +1,4 @@
 
-if exists('bg#api#add_completion')
-  call bg#api#add_completion(
-    \[
-    \ '/t:Clean ',
-    \ '/t:Build ',
-    \ '/t:Rebuile ',
-    \ '/t:Compile ',
-    \ '/t:Run ',
-    \ '/p:Configuration=Release ',
-    \ '/p:Configuration=Debug ',
-    \ '/p:Platform=Win32 ',
-    \ '/p:Platform=x64 ',
-    \ '/p:Platform=AnyCPU ',
-    \]
-  \)
-endif
-
 function! vs#get_version()
   if exists('g:vs_min_ver') && exists('g:vs_max_ver')
         \ && g:vs_min_ver != -1 && g:vs_max_ver != -1

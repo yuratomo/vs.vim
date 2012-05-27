@@ -7,6 +7,23 @@ if exists('g:loaded_vs') && g:loaded_vs == 1
   finish
 endif
 
+if exists('bg#api#add_completion')
+  call bg#api#add_completion(
+    \[
+    \ '/t:Clean ',
+    \ '/t:Build ',
+    \ '/t:Rebuile ',
+    \ '/t:Compile ',
+    \ '/t:Run ',
+    \ '/p:Configuration=Release ',
+    \ '/p:Configuration=Debug ',
+    \ '/p:Platform=Win32 ',
+    \ '/p:Platform=x64 ',
+    \ '/p:Platform=AnyCPU ',
+    \]
+  \)
+endif
+
 function! vs#clear()
   unlet g:vs_ver
   unlet g:vs_wdk_dir

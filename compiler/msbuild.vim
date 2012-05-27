@@ -40,7 +40,7 @@ else
     break
   endfor
 
-  exe 'CompilerSet makeprg=\"' . escape(bat, ' \') . '\"'
+  exe 'CompilerSet makeprg=' . escape(bat, ' \')
   CompilerSet errorformat&
 
 endif
