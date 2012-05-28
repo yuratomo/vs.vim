@@ -21,7 +21,7 @@ function s:get_help_pid()
   if executable('tasklist')
     let tlist = split(system('tasklist | findstr HelpLibAgent.exe')
     if len(tlist) > 0
-      return split(tlist[0], ' ')[0]
+      return split(tlist[0], '\s\+')[1]
     endif
     return 0
   else
