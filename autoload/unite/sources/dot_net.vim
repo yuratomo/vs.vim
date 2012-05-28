@@ -16,11 +16,17 @@ let s:source = {
       \ 'action_table' : {},
       \}
 
-let s:classes = [
-  \ {'word' : 'System.Windows.Controls.CheckBox'},
-  \ {'word' : 'System.sss2'},
-  \ {'word' : 'System.sss3'},
-  \]
+if !exists('s:classes')
+  let s:classes = []
+  for file in split(globpath(&runtimepath, 'dict/dot_net.dict'), '\n')
+    for line in readfile(file)
+      let item = {'word' : substitute(line, ' .*$', '', 'g'), 'abbr' : line}
+      if index(s:classes, item) == -1
+        call add(s:classes, item)
+      endif
+    endfor
+  endfor
+endif
 
 function! s:source.gather_candidates(args, context)"{{{
   return s:classes
@@ -35,6 +41,7 @@ let s:source.action_table.w3m_msdn_local = {
 function! s:source.action_table.w3m_msdn_local.func(candidates)"{{{
   for candidate in a:candidates
     call w3m#Open(g:w3m#OPEN_NORMAL, 'dot_net', candidate.word)
+    break
   endfor
 endfunction"}}}
 

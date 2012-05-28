@@ -46,7 +46,20 @@ function! s:engine.postproc()
 endfunction
 
 function! s:engine.filter(outputs)
+  let start = -1
+  let idx = 0
+  for output in a:outputs
+    if match(output, '展開するにはクリックします') != -1
+      let start = idx + 1
+      break
+    endif
+    let idx = idx + 1
+  endfor
+  if start != -1
+    return a:outputs[ start : ]
+  else
     return a:outputs
+  endif
 endfunction
 
 call w3m#search_engine#Add(s:engine)
