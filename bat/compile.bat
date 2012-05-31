@@ -12,7 +12,7 @@ REM ================ SETTING ==================
 :wdk
 set pwd=%cd%
 call "%wdk_dir%\bin\setenv.bat" %wdk_dir% %wdk_cond% %wdk_cpu% %wdk_os%
-cd %pwd:~0,2%
+%pwd:~0,2%
 cd %pwd%
 goto build
 
