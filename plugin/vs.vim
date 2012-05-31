@@ -45,4 +45,7 @@ function! vs#show()
 endfunction
 command! -nargs=0 VsShow :call vs#show()
 
+command! -nargs=0 VsPutFile :call vs#putFile()
+command! -nargs=0 VsGetFile :call vs#getFile()
+
 let g:loaded_vs = 1

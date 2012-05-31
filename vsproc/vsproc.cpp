@@ -13,11 +13,10 @@
 #define VSAPI __declspec(dllexport)
 #endif
 
-static char _result[256];
+static char _result[MAX_PATH + 32];
 
 using namespace System;
 using namespace EnvDTE;
-
 
 EnvDTE::DTE^ get_dte()
 {
@@ -50,6 +49,7 @@ VSAPI const char* put_file(char* str)
 {	
 	int line = 0;
 	int col = 0;
+	pin_ptr<const wchar_t> wch = nullptr;
 
 	char* space = NULL;
 	char* ptr = str;
@@ -77,13 +77,17 @@ VSAPI const char* put_file(char* str)
 	try {
 		dte->UserControl = true;
 		dte->MainWindow->Visible = true;
+	} catch (Exception^ e) {
+	}
+
+	try {
 		dte->ItemOperations->OpenFile(Convert::ToString(file), EnvDTE::Constants::vsViewKindTextView);
 		TextSelection^ sel = (TextSelection^)dte->ActiveDocument->Selection;
 		sel->MoveToLineAndOffset(line, col, false);
 		dte->MainWindow->Activate();
 	} catch (Exception^ e) {
 		_sprintf_p(_result, _countof(_result), 
-			"DTE Operation Error.");
+			"DTE Operation Error.(%s)", PtrToStringChars(e->ToString()));
 		return _result;
 	}
 
@@ -107,8 +111,10 @@ VSAPI const char* get_file(char* str)
 
 	EnvDTE::TextSelection^ tsel = (EnvDTE::TextSelection^)doc->Selection;
 	
-	String^ ret_str = doc->Path + "\\" + doc->default + " " + tsel->ActivePoint->Line;
+	String^ ret_str = doc->Path + doc->default + " " + tsel->ActivePoint->Line;
+
 	pin_ptr<const wchar_t> wch = PtrToStringChars(ret_str);
 	sprintf_s(_result, "%S\n", wch);
 	return _result;
 }
+
