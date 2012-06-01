@@ -36,12 +36,64 @@ function! vs#get_version()
   return { 'min':g:vs_min_ver , 'max':g:vs_max_ver }
 endfunction
 
+function! vs#resolveVsVersion()
+  "resolve visual studio version
+  if !exists('g:vs_ver')
+    let v = vs#get_version()
+    if v.min == -1 || v.max == 1
+      echoerr 'Are you install Visual Studio?'
+      echoerr 'Can not find environment of Visual Studio.'
+      finish
+    endif
+    if v.min == v.max
+      let g:vs_ver = v.min
+    else
+      let g:vs_ver=input('VisualStudio Version[' . v.min . '-' . v.max . ']: ')
+      if g:vs_ver < v.min || g:vs_ver > v.max
+        return 0
+      endif
+    endif
+  endif
+  return 1
+endfunction
+
+function! vs#setVsVersion()
+  if exists('g:vs_ver')
+    unlet g:vs_ver
+  endif
+  call vs#resolveVsVersion()
+endfunction
+
+function! vs#show()
+  if exists('g:vs_ver')
+  exe 'echo "Target VisualStudio version is ' . g:vs_ver . '."'
+  endif
+  if exists('g:vs_wdk_dir')
+  exe 'echo "WDK path is ' . "'" .  escape(g:vs_wdk_dir, ' \') . "'" . '."'
+  endif
+  exe 'echo "WDK condition is ' . g:vs_wdk_cond . '."'
+  exe 'echo "WDK target cpu is ' . g:vs_wdk_cpu . '."'
+  exe 'echo "WDK target os is ' . g:vs_wdk_os . '."'
+endfunction
+
 function! vs#putFile()
-  echo libcall(g:vsproc_dll_path, 'put_file', line('.') . ' ' . col('.') . ' ' . expand('%:p'))
+  if vs#resolveVsVersion() == 0
+    return
+  endif
+  echo libcall(g:vsproc_dll_path, 'put_file', 
+      \ join([g:vs_ver, line('.'), col('.'), expand('%:p')], ' '))
 endfunction
 
 function! vs#getFile()
-  let param = libcall(g:vsproc_dll_path, 'get_file', '')
-  echo param
+  if vs#resolveVsVersion() == 0
+    return
+  endif
+  let param = libcall(g:vsproc_dll_path, 'get_file', g:vs_ver)
+  let sp = strridx(param, ' ')
+  if sp == -1
+    return
+  endif
+
+  exe 'edit +' . param[ sp+1 : ] . ' ' . param[ 0 : sp-1 ]
 endfunction
 

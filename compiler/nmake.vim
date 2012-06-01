@@ -1,33 +1,14 @@
 " Vim compiler file
 " Compiler:	nmake
 " Maintainer:	yuratomo
-" Last Change:	27-May-2012.20
+" Last Change:	01-Jun-2012.20
 
 if exists("current_compiler")
   finish
 endif
 let current_compiler = "nmake"
 
-let valid_config = 1
-
-"resolve visual studio version
-if !exists('g:vs_ver')
-  let v = vs#get_version()
-  if v.min == -1 || v.max == 1
-    echoerr 'Are you install Visual Studio?'
-    echoerr 'Can not find environment of Visual Studio.'
-    finish
-  endif
-  if v.min == v.max
-    let g:vs_ver = v.min
-  else
-    let g:vs_ver=input('VisualStudio Version[' . v.min . '-' . v.max . ']: ')
-    if g:vs_ver < v.min || g:vs_ver > v.max
-      let valid_config = 0
-    endif
-  endif
-endif
-
+let valid_config = vs#resolveVsVersion()
 if valid_config == 0
   echoerr 'nmake.vim configuration error(ver=' . g:vs_ver . ')'
 else
@@ -42,6 +23,5 @@ else
 
   exe 'CompilerSet makeprg=' . escape(bat, ' \')
   CompilerSet errorformat&
-
 endif
 

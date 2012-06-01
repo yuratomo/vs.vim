@@ -18,9 +18,12 @@ static char _result[MAX_PATH + 32];
 using namespace System;
 using namespace EnvDTE;
 
-EnvDTE::DTE^ get_dte()
+EnvDTE::DTE^ get_dte(int ver)
 {
 	String^ name = "VisualStudio.DTE";
+  if (ver >= 8) {
+    name += "." + ver + ".0";
+  }
 	EnvDTE::DTE^ dte = nullptr;
 
 	try {
@@ -47,13 +50,14 @@ VSAPI const int set_version(int version)
 
 VSAPI const char* put_file(char* str)
 {	
+	int ver = 0;
 	int line = 0;
 	int col = 0;
 	pin_ptr<const wchar_t> wch = nullptr;
 
 	char* space = NULL;
 	char* ptr = str;
-	for (int idx=0; idx<2; idx++) {
+	for (int idx=0; idx<3; idx++) {
 		space = strchr(ptr, ' ');
 		if (space == NULL) {
 			space = strchr(ptr, '\t');
@@ -64,10 +68,10 @@ VSAPI const char* put_file(char* str)
 		ptr = space+1;
 	}
 
-	sscanf(str, "%d %d", &line, &col);
+	sscanf(str, "%d %d %d", &ver, &line, &col);
 	String^ file = gcnew String(ptr);
 
-	EnvDTE::DTE^ dte = get_dte();
+	EnvDTE::DTE^ dte = get_dte(ver);
 	if (dte == nullptr) {
 		_sprintf_p(_result, _countof(_result), 
 			"Can not get DTE object. Are you installed Visual Studio (not Express)?");
@@ -96,7 +100,7 @@ VSAPI const char* put_file(char* str)
 
 VSAPI const char* get_file(char* str)
 {
-	EnvDTE::DTE^ dte = get_dte();
+	EnvDTE::DTE^ dte = get_dte(atoi(str));
 	if (dte == nullptr) {
 		_sprintf_p(_result, _countof(_result), 
 			"Can not get DTE object. Are you installed Visual Studio (not Express)?");
