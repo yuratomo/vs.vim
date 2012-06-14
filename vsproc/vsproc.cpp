@@ -1,7 +1,6 @@
 // vsproc.cpp : DLL アプリケーション用にエクスポートされる関数を定義します。
 //
 
-#include "stdafx.h"
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
@@ -13,7 +12,7 @@
 #define VSAPI __declspec(dllexport)
 #endif
 
-static char _result[MAX_PATH + 32];
+static char _result[1024];
 
 using namespace System;
 using namespace EnvDTE;
