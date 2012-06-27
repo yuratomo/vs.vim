@@ -1,14 +1,14 @@
 " Vim compiler file
 " Compiler:	msbuild
 " Maintainer:	yuratomo
-" Last Change:	01-Jun-2012.01
+" Last Change:	15-Jun-2012.01
 
 if exists("current_compiler")
   finish
 endif
 let current_compiler = "msbuild"
 
-if exists('bg#api#add_completion')
+if exists('g:loaded_bg')
   call bg#api#add_completion(
     \[
     \ '/t:Clean ',

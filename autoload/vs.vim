@@ -94,6 +94,12 @@ function! vs#getFile()
     return
   endif
 
-  exe 'edit +' . param[ sp+1 : ] . ' ' . param[ 0 : sp-1 ]
+  let l = param[ sp+1 : ]
+  let f = param[ 0 : sp-1 ]
+  if type(l) == type(0) && file_readable(f)
+    exe 'edit +' . l . ' ' . f
+  else
+    echoerr param
+  endif
 endfunction
 
