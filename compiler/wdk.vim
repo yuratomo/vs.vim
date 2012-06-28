@@ -1,7 +1,7 @@
 " Vim compiler file
 " Compiler:	Visual Studio 9.0 compiler and Windows Driver Kit
 " Maintainer:	yuratomo
-" Last Change:	27-May-2012.20
+" Last Change:	28-Jun-2012.20
 
 if exists("current_compiler")
   finish
@@ -59,11 +59,11 @@ endif
 if valid_config == 0
   echoerr 'wdk configuration error(wdk_dir=' . g:vs_wdk_dir . ')'
 else
-  let $vs_comp = 'build'
-  let $wdk_dir = g:vs_wdk_dir
-  let $wdk_os  = g:vs_wdk_os
-  let $wdk_cond= g:vs_wdk_cond
-  let $wdk_cpu = g:vs_wdk_cpu
+  let $VS_COMP = 'build'
+  let $WDK_DIR = g:vs_wdk_dir
+  let $WDK_OS  = g:vs_wdk_os
+  let $WDK_COND= g:vs_wdk_cond
+  let $WDK_CPU = g:vs_wdk_cpu
 
   let bat = ''
   for file in split(globpath(&runtimepath, 'bat/compile.bat'), '\n')

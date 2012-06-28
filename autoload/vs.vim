@@ -2,6 +2,14 @@
 let g:vsproc_dll_path =
       \ get(g:, 'vsproc_dll_path', expand('<sfile>:p:h') . '\' .  'vsproc.dll')
 
+let s:vs_cpu= [
+  \ 'x86',
+  \ 'amd64',
+  \ 'ia64',
+  \ 'x86_amd64',
+  \ 'x86_ia64',
+  \]
+
 function! vs#get_version()
   if exists('g:vs_min_ver') && exists('g:vs_max_ver')
         \ && g:vs_min_ver != -1 && g:vs_max_ver != -1
@@ -36,6 +44,16 @@ function! vs#get_version()
   return { 'min':g:vs_min_ver , 'max':g:vs_max_ver }
 endfunction
 
+function! vs#vs_cpu_list(A, L, P)
+  let items = []
+  for item in s:vs_cpu
+    if item =~ '^'.a:A
+      call add(items, item)
+    endif
+  endfor
+  return items
+endfunction
+
 function! vs#resolveVsVersion()
   "resolve visual studio version
   if !exists('g:vs_ver')
@@ -48,11 +66,14 @@ function! vs#resolveVsVersion()
     if v.min == v.max
       let g:vs_ver = v.min
     else
-      let g:vs_ver=input('VisualStudio Version[' . v.min . '-' . v.max . ']: ')
+      let g:vs_ver=input('VisualStudio Version[' . v.min . '-' . v.max . ']: ', v.max)
       if g:vs_ver < v.min || g:vs_ver > v.max
         return 0
       endif
     endif
+  endif
+  if !exists('g:vs_cpu')
+    let g:vs_cpu =input('Target CPU: ', 'amd64', 'customlist,vs#vs_cpu_list')
   endif
   return 1
 endfunction
@@ -66,10 +87,10 @@ endfunction
 
 function! vs#show()
   if exists('g:vs_ver')
-  exe 'echo "Target VisualStudio version is ' . g:vs_ver . '."'
+    exe 'echo "Target VisualStudio version is ' . g:vs_ver . '."'
   endif
   if exists('g:vs_wdk_dir')
-  exe 'echo "WDK path is ' . "'" .  escape(g:vs_wdk_dir, ' \') . "'" . '."'
+    exe 'echo "WDK path is ' . "'" .  escape(g:vs_wdk_dir, ' \') . "'" . '."'
   endif
   exe 'echo "WDK condition is ' . g:vs_wdk_cond . '."'
   exe 'echo "WDK target cpu is ' . g:vs_wdk_cpu . '."'
@@ -96,7 +117,7 @@ function! vs#getFile()
 
   let l = param[ sp+1 : ]
   let f = param[ 0 : sp-1 ]
-  if type(l) == type(0) && file_readable(f)
+  if file_readable(f)
     exe 'edit +' . l . ' ' . f
   else
     echoerr param

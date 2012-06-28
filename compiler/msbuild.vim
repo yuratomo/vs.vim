@@ -1,7 +1,7 @@
 " Vim compiler file
 " Compiler:	msbuild
 " Maintainer:	yuratomo
-" Last Change:	15-Jun-2012.01
+" Last Change:	28-Jun-2012.01
 
 if exists("current_compiler")
   finish
@@ -27,10 +27,11 @@ endif
 
 let valid_config = vs#resolveVsVersion()
 if valid_config == 0
-  echoerr 'msbuild.vim configuration error(ver=' . g:vs_ver . ')'
+  echoerr 'msbuild.vim configuration error(ver=' . g:vs_ver . ', cpu=' . g:vs_cpu . ')'
 else
-  let $vs_comp = 'msbuild'
-  let $vs_ver  = g:vs_ver
+  let $VS_COMP = 'msbuild'
+  let $VS_VER  = g:vs_ver
+  let $VS_CPU  = g:vs_cpu
 
   let bat = ''
   for file in split(globpath(&runtimepath, 'bat/compile.bat'), '\n')
