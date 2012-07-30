@@ -1,7 +1,7 @@
 " Vim compiler file
 " Compiler:	msbuild
 " Maintainer:	yuratomo
-" Last Change:	28-Jun-2012.01
+" Last Change:	28-Jul-2012.01
 
 if exists("current_compiler")
   finish
@@ -35,7 +35,7 @@ else
 
   let bat = ''
   for file in split(globpath(&runtimepath, 'bat/compile.bat'), '\n')
-    let bat = file
+    let bat = substitute(file, escape(expand('~\'), '\'), '~\', '')
     break
   endfor
 

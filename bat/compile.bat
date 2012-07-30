@@ -17,7 +17,7 @@ if "%VS_VER%"  == "9"   set BASEDIR=%VS90COMNTOOLS%
 if "%VS_VER%"  == "10"  set BASEDIR=%VS100COMNTOOLS%
 if "%VS_VER%"  == "11"  set BASEDIR=%VS110COMNTOOLS%
 if "%VS_VER%"  == "12"  set BASEDIR=%VS120COMNTOOLS%
-call "%BASEDIR%..\..\vcvarsall.bat" %VS_CPU%
+call "%BASEDIR%..\..\VC\vcvarsall.bat" %VS_CPU%
 goto build
 
 REM ================ BUILD ==================
